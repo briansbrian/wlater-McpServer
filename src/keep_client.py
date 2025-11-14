@@ -1,6 +1,7 @@
 """Google Keep client wrapper for read-only operations."""
 
 import logging
+import re
 from typing import List, Dict, Optional, Any
 
 import gkeepapi
@@ -163,7 +164,7 @@ class KeepClient:
         """Search notes with filters.
         
         Args:
-            query: Text to search for
+            query: Text to search for (case-insensitive)
             pinned: Filter by pinned status
             archived: Filter by archived status
             trashed: Filter by trashed status
@@ -174,9 +175,11 @@ class KeepClient:
         Returns:
             List of matching note dictionaries
         """
-        # Start with all notes or search results
+        # Convert query to case-insensitive regex pattern
         if query:
-            results = self.keep.find(query=query)
+            # Escape special regex characters and make case-insensitive
+            pattern = re.compile(re.escape(query), re.IGNORECASE)
+            results = self.keep.find(query=pattern)
         else:
             results = self.keep.all()
         
