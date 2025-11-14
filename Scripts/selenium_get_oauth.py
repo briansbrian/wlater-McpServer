@@ -7,11 +7,16 @@ import sys
 import platform
 import getpass as getpass_module
 import msvcrt  # For Windows key detection
+from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from gpsoauth import exchange_token
+
+# Add src directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+from credentials import generate_android_id
 
 def check_for_exit():
     """Check if user pressed ESC to exit"""
@@ -24,66 +29,7 @@ def check_for_exit():
                 sys.exit(0)
     # For non-Windows systems, we'll handle Ctrl+C naturally
 
-# Platform codes for Android ID generation
-PLATFORM_CODES = {
-    'Windows': '01',
-    'Linux':   '02',
-    'Darwin':  '03',
-    'Java':    '04',
-    'FreeBSD': '05',
-    'OpenBSD': '06',
-    'NetBSD':  '07',
-    'SunOS':   '08',
-    'AIX':     '09',
-    'HP-UX':   '0a',
-}
 
-def encode_base36_to_hex(s: str) -> str:
-    """Convert 6-char base-36 string to 8-char hex"""
-    if len(s) != 6:
-        raise ValueError("Input must be exactly 6 characters")
-    
-    value = 0
-    for ch in s:
-        if '0' <= ch <= '9':
-            digit = ord(ch) - ord('0')
-        elif 'a' <= ch <= 'z':
-            digit = ord(ch) - ord('a') + 10
-        else:
-            raise ValueError("Invalid character; only 0-9 and a-z allowed")
-        value = value * 36 + digit
-    
-    return f"{value:08x}"
-
-def generate_android_id():
-    """Generate reversible Android ID based on system and username"""
-    # App prefix for "wlater"
-    app_prefix = "776c61"
-    
-    # Detect platform
-    system = platform.system()
-    platform_code = PLATFORM_CODES.get(system, '00')
-    
-    # Get system username
-    username = getpass_module.getuser()
-    
-    # Normalize username
-    # 1. Take first 8 characters
-    # 2. Convert to lowercase
-    # 3. Keep only alphanumeric (letters and numbers)
-    # 4. Truncate to 6 chars
-    # 5. Pad with '0' if less than 6
-    normalized = username[:8].lower()
-    normalized = ''.join(c for c in normalized if c.isalnum())[:6]
-    normalized = normalized.ljust(6, '0')
-    
-    # Encode username to hex
-    username_hex = encode_base36_to_hex(normalized)
-    
-    # Combine all parts
-    android_id = app_prefix + platform_code + username_hex
-    
-    return android_id, system, username, normalized
 
 def get_oauth_token_selenium(email, password):
     """
@@ -265,6 +211,56 @@ def get_master_token(email, oauth_token, android_id="deadbeefdeadbeef"):
         print("\nℹ️  OAuth tokens expire quickly (minutes). Try running the script again.", file=sys.stderr)
         return None
 
+def run_selenium_auth():
+    """Run selenium authentication and return credentials.
+    
+    This function is designed to be called by setup.py for programmatic use.
+    Prompts for email and password, generates android_id, extracts oauth_token,
+    and exchanges it for master_token.
+    
+    Returns:
+        Tuple of (email, master_token, android_id) on success, None on failure
+    """
+    try:
+        # Generate Android ID using credentials module
+        print("\n🔧 Generating Android ID...")
+        android_id = generate_android_id()
+        print(f"✓ Generated Android ID: {android_id}")
+        
+        # Get email
+        email = input("\nEnter your Google email: ").strip()
+        if not email:
+            print("❌ Email is required!")
+            return None
+        
+        # Get password
+        password = getpass_module.getpass("Enter your Google password: ").strip()
+        if not password:
+            print("❌ Password is required!")
+            return None
+        
+        # Get OAuth token via selenium
+        oauth_token = get_oauth_token_selenium(email, password)
+        
+        if not oauth_token:
+            return None
+        
+        # Exchange for master token
+        master_token = get_master_token(email, oauth_token, android_id)
+        
+        if not master_token:
+            return None
+        
+        return (email, master_token, android_id)
+    
+    except KeyboardInterrupt:
+        print("\n\n🛑 Process cancelled by user")
+        return None
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        return None
+
+
 def main():
     try:
         print("="*60)
@@ -290,15 +286,8 @@ def main():
         print("="*60)
         
         try:
-            generated_id, system, username, normalized = generate_android_id()
-            print(f"\n✓ Detected OS: {system}")
-            print(f"✓ System Username: {username}")
-            print(f"✓ Normalized: {normalized}")
+            generated_id = generate_android_id()
             print(f"\n📱 Generated Android ID: {generated_id}")
-            print("\nStructure breakdown:")
-            print(f"  - App prefix (wlater): {generated_id[0:6]}")
-            print(f"  - Platform code ({system}): {generated_id[6:8]}")
-            print(f"  - Username encoded ({normalized}): {generated_id[8:16]}")
         except Exception as e:
             print(f"⚠️  Error generating Android ID: {e}")
             generated_id = "deadbeefdeadbeef"

@@ -26,6 +26,7 @@ config.json
 .env
 *.key
 *.pem
+.wlater/
 
 # IDE
 .vscode/

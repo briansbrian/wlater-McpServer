@@ -1,0 +1,16 @@
+# Core MCP and Google Keep dependencies
+fastmcp>=0.1.0
+gkeepapi>=0.15.0
+keyring>=24.0.0
+
+# OAuth token exchange
+gpsoauth>=1.0.0
+
+# Selenium for automated authentication (optional)
+selenium>=4.0.0
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-mock>=3.0.0
+black>=23.0.0
+mypy>=1.0.0
