@@ -508,6 +508,44 @@ def get_media_link(note_id: str, blob_id: str) -> Dict[str, Any]:
     return keep_client.get_media_link(note_id, blob_id)
 
 
+# ============================================================================
+# TRASH OPERATIONS (Recoverable)
+# ============================================================================
+
+@mcp.tool
+def trash_note(note_id: str) -> Dict[str, Any]:
+    """Move note to trash (requires sync, recoverable operation).
+    
+    This is a RECOVERABLE operation - trashed notes can be restored using
+    untrash_note(). Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        
+    Returns:
+        Preview response showing old and new trashed status
+    """
+    keep_client = get_keep_client()
+    return keep_client.trash_note(note_id)
+
+
+@mcp.tool
+def untrash_note(note_id: str) -> Dict[str, Any]:
+    """Restore note from trash (requires sync, recoverable operation).
+    
+    This RESTORES a trashed note back to active status. Changes are made
+    locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        
+    Returns:
+        Preview response showing old and new trashed status
+    """
+    keep_client = get_keep_client()
+    return keep_client.untrash_note(note_id)
+
+
 if __name__ == "__main__":
     logger.info("Starting wlater MCP server...")
     mcp.run()

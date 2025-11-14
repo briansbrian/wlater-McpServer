@@ -1510,3 +1510,105 @@ class KeepClient:
                 f"Failed to get media link: {str(e)}",
                 "Check server logs for details"
             )
+    
+    # Trash Operations (Recoverable)
+    
+    def trash_note(
+        self, 
+        note_id: str
+    ) -> Dict[str, Any]:
+        """Send note to trash (recoverable operation).
+        
+        Args:
+            note_id: Google Keep note ID
+            
+        Returns:
+            Preview response with old and new trashed status
+        """
+        try:
+            # Get note by ID using keep.get()
+            note = self.keep.get(note_id)
+            
+            if note is None:
+                return format_error_response(
+                    "ValueError",
+                    f"Note {note_id} not found",
+                    "Use list_all_notes() to see available notes"
+                )
+            
+            # Store old trashed state
+            old_trashed = note.trashed
+            
+            # Call note.trash() to send note to trash
+            note.trash()
+            
+            # Return preview with old and new trashed status
+            return format_preview_response(
+                "trash_note",
+                {
+                    "note_id": note_id,
+                    "note_title": note.title or "",
+                    "note_type": "List" if isinstance(note, gkeepapi.node.List) else "Note",
+                    "old_trashed": old_trashed,
+                    "new_trashed": True
+                },
+                f"Note moved to trash locally (recoverable). Call sync_changes() to save to Google Keep."
+            )
+            
+        except Exception as e:
+            logger.exception("Unexpected error in trash_note")
+            return format_error_response(
+                type(e).__name__,
+                f"Unexpected error: {str(e)}",
+                "Check server logs for details"
+            )
+    
+    def untrash_note(
+        self, 
+        note_id: str
+    ) -> Dict[str, Any]:
+        """Restore note from trash (recoverable operation).
+        
+        Args:
+            note_id: Google Keep note ID
+            
+        Returns:
+            Preview response with old and new trashed status
+        """
+        try:
+            # Get note by ID using keep.get()
+            note = self.keep.get(note_id)
+            
+            if note is None:
+                return format_error_response(
+                    "ValueError",
+                    f"Note {note_id} not found",
+                    "Use search_notes(trashed=True) to see trashed notes"
+                )
+            
+            # Store old trashed state
+            old_trashed = note.trashed
+            
+            # Call note.untrash() to restore note from trash
+            note.untrash()
+            
+            # Return preview with old and new trashed status
+            return format_preview_response(
+                "untrash_note",
+                {
+                    "note_id": note_id,
+                    "note_title": note.title or "",
+                    "note_type": "List" if isinstance(note, gkeepapi.node.List) else "Note",
+                    "old_trashed": old_trashed,
+                    "new_trashed": False
+                },
+                f"Note restored from trash locally. Call sync_changes() to save to Google Keep."
+            )
+            
+        except Exception as e:
+            logger.exception("Unexpected error in untrash_note")
+            return format_error_response(
+                type(e).__name__,
+                f"Unexpected error: {str(e)}",
+                "Check server logs for details"
+            )

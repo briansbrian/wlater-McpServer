@@ -255,7 +255,50 @@ This ensures all dependencies are correctly resolved from the virtual environmen
     - Both tools call corresponding KeepClient methods
     - _Requirements: 11.1, 11.2_
 
-- [x] 9. Implement comprehensive error handling
+- [x] 9. Implement trash operations (recoverable)
+
+
+
+
+
+
+
+
+  - [x] 9.1 Implement `trash_note()` in KeepClient
+
+
+
+    - Get note by ID using `keep.get()`
+    - Store old trashed state
+    - Call `note.trash()` to send note to trash
+    - Return preview with old and new trashed status
+    - _Requirements: Recoverable operation - notes can be restored_
+  
+
+  - [x] 9.2 Implement `untrash_note()` in KeepClient
+
+
+
+
+    - Get note by ID using `keep.get()`
+    - Store old trashed state
+    - Call `note.untrash()` to restore note from trash
+    - Return preview with old and new trashed status
+    - _Requirements: Recoverable operation - restores trashed notes_
+  
+
+  - [x] 9.3 Add MCP tools for trash operations in `src/server.py`
+
+
+
+    - Register `trash_note` tool with `@mcp.tool`
+    - Register `untrash_note` tool with `@mcp.tool`
+    - Both tools call corresponding KeepClient methods
+    - Tool descriptions must emphasize recoverability
+
+- [x] 10. Implement comprehensive error handling
+
+
 
 
 
@@ -272,13 +315,16 @@ This ensures all dependencies are correctly resolved from the virtual environmen
   - [x] 9.2 Add not found error handling
 
 
+
     - Handle cases where note/list/item/label not found
     - Return descriptive error messages
     - Include suggestions for finding resources
     - _Requirements: 10.2, 10.5_
   
 
+
   - [x] 9.3 Add type error handling
+
 
     - Check note type before text updates (List vs Note)
     - Return clear error messages explaining type mismatch
@@ -287,12 +333,22 @@ This ensures all dependencies are correctly resolved from the virtual environmen
 
   - [x] 9.4 Add API error handling
 
+
+
+
     - Wrap all gkeepapi calls in try-except blocks
     - Catch and format API exceptions
     - Return error details with context
+
+
     - _Requirements: 10.3, 10.4_
 
-- [ ] 10. Update documentation
+- [x] 11. Update documentation
+
+
+
+
+
   - Update README.md with Tier 2 capabilities overview
   - Document all new MCP tools with examples
   - Add safety guidelines for sync operations
