@@ -176,6 +176,338 @@ def find_label(name: str) -> Optional[Dict[str, str]]:
     return keep_client.find_label(name)
 
 
+# ============================================================================
+# TIER 2: MODIFICATION TOOLS (Require explicit sync)
+# ============================================================================
+
+@mcp.tool
+def update_list_item_checked(
+    list_id: str, 
+    item_id: str, 
+    checked: bool
+) -> Dict[str, Any]:
+    """Update checked status of a list item (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        list_id: Google Keep list ID
+        item_id: List item ID
+        checked: New checked status (True to check, False to uncheck)
+        
+    Returns:
+        Preview response showing old and new checked status
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_list_item_checked(list_id, item_id, checked)
+
+
+@mcp.tool
+def add_list_item(
+    list_id: str, 
+    text: str, 
+    checked: bool = False,
+    sort: int = None
+) -> Dict[str, Any]:
+    """Add new item to existing list (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        list_id: Google Keep list ID
+        text: Item text
+        checked: Initial checked status (default: False)
+        sort: Sort order (optional)
+        
+    Returns:
+        Preview response with new item details
+    """
+    keep_client = get_keep_client()
+    return keep_client.add_list_item(list_id, text, checked, sort)
+
+
+@mcp.tool
+def create_note(
+    title: str = "", 
+    text: str = ""
+) -> Dict[str, Any]:
+    """Create new text note (requires sync).
+    
+    Creates a new note locally. Must call sync_changes() to save to Google Keep.
+    
+    Args:
+        title: Note title (default: empty)
+        text: Note text content (default: empty)
+        
+    Returns:
+        Preview response with note ID, title, and text
+    """
+    keep_client = get_keep_client()
+    return keep_client.create_note(title, text)
+
+
+@mcp.tool
+def create_list(
+    title: str = "", 
+    items: List[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """Create new list with items (requires sync).
+    
+    Items format: [{"text": "item text", "checked": False}, ...]
+    Must call sync_changes() to save to Google Keep.
+    
+    Args:
+        title: List title (default: empty)
+        items: List of items with format [{"text": "...", "checked": False}, ...]
+        
+    Returns:
+        Preview response with list ID, title, and items
+    """
+    keep_client = get_keep_client()
+    return keep_client.create_list(title, items)
+
+
+@mcp.tool
+def update_note_title(
+    note_id: str, 
+    title: str
+) -> Dict[str, Any]:
+    """Update note title (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        title: New title
+        
+    Returns:
+        Preview response showing old and new title
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_note_title(note_id, title)
+
+
+@mcp.tool
+def update_note_text(
+    note_id: str, 
+    text: str
+) -> Dict[str, Any]:
+    """Update note text content (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    Note: Only works on Note type, not List type.
+    
+    Args:
+        note_id: Google Keep note ID
+        text: New text content
+        
+    Returns:
+        Preview response showing old and new text
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_note_text(note_id, text)
+
+
+@mcp.tool
+def update_note_color(
+    note_id: str, 
+    color: str
+) -> Dict[str, Any]:
+    """Update note color (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        color: Color name (White, Red, Orange, Yellow, Green, Teal, 
+               Blue, DarkBlue, Purple, Pink, Brown, Gray)
+        
+    Returns:
+        Preview response showing old and new color
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_note_color(note_id, color)
+
+
+@mcp.tool
+def update_note_pinned(
+    note_id: str, 
+    pinned: bool
+) -> Dict[str, Any]:
+    """Pin or unpin note (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        pinned: New pinned status (True to pin, False to unpin)
+        
+    Returns:
+        Preview response showing old and new pinned status
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_note_pinned(note_id, pinned)
+
+
+@mcp.tool
+def update_note_archived(
+    note_id: str, 
+    archived: bool
+) -> Dict[str, Any]:
+    """Archive or unarchive note (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        archived: New archived status (True to archive, False to unarchive)
+        
+    Returns:
+        Preview response showing old and new archived status
+    """
+    keep_client = get_keep_client()
+    return keep_client.update_note_archived(note_id, archived)
+
+
+@mcp.tool
+def create_label(name: str) -> Dict[str, Any]:
+    """Create new label (requires sync).
+    
+    Creates a new label locally. Must call sync_changes() to save to Google Keep.
+    
+    Args:
+        name: Label name
+        
+    Returns:
+        Preview response with label ID and name
+    """
+    keep_client = get_keep_client()
+    return keep_client.create_label(name)
+
+
+@mcp.tool
+def add_label_to_note(
+    note_id: str, 
+    label_name: str
+) -> Dict[str, Any]:
+    """Add label to note (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        label_name: Label name to add
+        
+    Returns:
+        Preview response with note title and updated labels
+    """
+    keep_client = get_keep_client()
+    return keep_client.add_label_to_note(note_id, label_name)
+
+
+@mcp.tool
+def remove_label_from_note(
+    note_id: str, 
+    label_name: str
+) -> Dict[str, Any]:
+    """Remove label from note (requires sync).
+    
+    Changes are made locally and must be synced with sync_changes().
+    
+    Args:
+        note_id: Google Keep note ID
+        label_name: Label name to remove
+        
+    Returns:
+        Preview response with note title and updated labels
+    """
+    keep_client = get_keep_client()
+    return keep_client.remove_label_from_note(note_id, label_name)
+
+
+# ============================================================================
+# SYNC CONTROL TOOLS
+# ============================================================================
+
+@mcp.tool
+def sync_changes() -> Dict[str, Any]:
+    """Sync all pending changes to Google Keep.
+    
+    Pushes all local modifications to Google Keep servers.
+    This is the ONLY way changes are saved.
+    
+    Returns:
+        Confirmation with sync timestamp
+    """
+    keep_client = get_keep_client()
+    return keep_client.sync_changes()
+
+
+@mcp.tool
+def get_pending_changes() -> Dict[str, Any]:
+    """Get preview of all pending changes before syncing.
+    
+    Shows what will be synced when sync_changes() is called.
+    
+    Returns:
+        Structured preview of all pending changes
+    """
+    keep_client = get_keep_client()
+    return keep_client.get_pending_changes()
+
+
+@mcp.tool
+def refresh_notes() -> Dict[str, Any]:
+    """Refresh local cache from Google Keep server.
+    
+    Fetches latest data from Google Keep. If there are pending local
+    changes, they will be synced during this operation.
+    
+    Returns:
+        Confirmation message with timestamp
+    """
+    keep_client = get_keep_client()
+    return keep_client.refresh_from_server()
+
+
+# ============================================================================
+# MEDIA OPERATIONS (Read-Only)
+# ============================================================================
+
+@mcp.tool
+def get_note_media(note_id: str) -> Dict[str, Any]:
+    """Get all media attachments from a note (read-only).
+    
+    Returns metadata for images, drawings, and audio clips attached to a note.
+    
+    Args:
+        note_id: Google Keep note ID
+        
+    Returns:
+        Dictionary with media metadata including type, dimensions, and extracted text
+    """
+    keep_client = get_keep_client()
+    return keep_client.get_note_media(note_id)
+
+
+@mcp.tool
+def get_media_link(note_id: str, blob_id: str) -> Dict[str, Any]:
+    """Get download URL for a media blob (read-only).
+    
+    Returns canonical URL for downloading the media file. Note that URLs
+    are temporary and may expire.
+    
+    Args:
+        note_id: Google Keep note ID
+        blob_id: Media blob ID (from get_note_media)
+        
+    Returns:
+        Dictionary with download URL and media metadata
+    """
+    keep_client = get_keep_client()
+    return keep_client.get_media_link(note_id, blob_id)
+
+
 if __name__ == "__main__":
     logger.info("Starting wlater MCP server...")
     mcp.run()
