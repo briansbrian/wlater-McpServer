@@ -1,0 +1,45 @@
+# Project specific
+gkeepapi-main/
+Docs/
+backup/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Sensitive data - IMPORTANT!
+master_token.txt
+*.token
+config.json
+.env
+*.key
+*.pem
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache
+*.cache
+.pytest_cache/
+*.log
