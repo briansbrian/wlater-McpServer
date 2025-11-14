@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wlater-mcp"
+version = "0.1.0"
+description = "A Model Context Protocol (MCP) server that provides AI assistants with secure, read-only access to Google Keep notes and lists."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "briansbrian"},
+]
+keywords = ["mcp", "google-keep", "ai-assistant", "model-context-protocol"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "fastmcp>=0.1.0",
+    "gkeepapi>=0.15.0",
+    "keyring>=24.0.0",
+    "gpsoauth>=1.0.0",
+]
+
+[project.optional-dependencies]
+selenium = ["selenium>=4.0.0"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-mock>=3.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/briansbrian/wlater-McpServer"
+Repository = "https://github.com/briansbrian/wlater-McpServer"
+Issues = "https://github.com/briansbrian/wlater-McpServer/issues"
+
+[project.scripts]
+wlater-setup = "src.setup:run_setup"
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.setuptools.package-data]
+src = ["*.py"]
