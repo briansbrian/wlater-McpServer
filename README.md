@@ -129,13 +129,14 @@ Check your config file paths and restart your MCP client.
 
 ## Links
 
-- [GitHub Repository](https://github.com/briansbrian/wlater-McpServer)
+- [Python Package](https://pypi.org/project/wlater-mcp)
 - [Report Issues](https://github.com/briansbrian/wlater-McpServer/issues)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
 
 
 
