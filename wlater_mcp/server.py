@@ -14,8 +14,8 @@ except ImportError:
         "fastmcp is required. Install it with: pip install fastmcp"
     )
 
-from src.credentials import load_credentials
-from src.keep_client import KeepClient
+from wlater_mcp.credentials import load_credentials
+from wlater_mcp.keep_client import KeepClient
 
 
 # Configure logging

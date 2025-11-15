@@ -35,14 +35,28 @@ You'll need your master token. Get it from:
 
 ## Configuration
 
-Add to your MCP client's config file (e.g., `mcp.json`):
+Add to your MCP client's config file:
 
+**For VS Code** (`.vscode/mcp.json`):
+```json
+{
+  "servers": {
+    "wlater": {
+      "command": "python",
+      "args": ["-m", "wlater_mcp.server"]
+    }
+  }
+}
+```
+
+**For Claude Desktop** or other MCP clients:
 ```json
 {
   "mcpServers": {
     "wlater": {
       "command": "python",
-      "args": ["-m", "wlater_mcp.server"]
+      "args": ["-m", "wlater_mcp.server"],
+      "disabled": false
     }
   }
 }

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wlater-mcp"
-version = "0.1.6"
+version = "0.1.7"
 description = "Connect your AI assistant to Google Keep. Search, read, and manage your notes and lists through natural conversation."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -46,10 +46,10 @@ Repository = "https://github.com/briansbrian/wlater-McpServer"
 Issues = "https://github.com/briansbrian/wlater-McpServer/issues"
 
 [project.scripts]
-wlater-setup = "src.setup:run_setup"
+wlater-setup = "wlater_mcp.setup:run_setup"
 
 [tool.setuptools]
-packages = ["src"]
+packages = ["wlater_mcp"]
 
 [tool.setuptools.package-data]
-src = ["*.py"]
+wlater_mcp = ["*.py"]

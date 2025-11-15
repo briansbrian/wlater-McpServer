@@ -25,7 +25,7 @@ except ImportError:
     print("Try: pip install gpsoauth")
     sys.exit(1)
 
-from src.credentials import generate_android_id
+from wlater_mcp.credentials import generate_android_id
 
 # Windows-specific imports
 if sys.platform == 'win32':

@@ -8,11 +8,13 @@ import sys
 import os
 from pathlib import Path
 
-from src.credentials import (
+from wlater_mcp.credentials import (
     store_credentials,
     validate_master_token,
     validate_android_id,
-    generate_android_id
+    generate_android_id,
+    load_credentials,
+    get_config_path
 )
 
 
@@ -22,6 +24,28 @@ def run_setup():
     print("wlater MCP Server Setup")
     print("=" * 60)
     print()
+    
+    # Check if credentials already exist
+    try:
+        email, token, android_id = load_credentials()
+        print("⚠️  Existing credentials found!")
+        print(f"   Email: {email}")
+        print(f"   Config: {get_config_path()}")
+        print()
+        
+        choice = input("Do you want to reconfigure? This will overwrite existing credentials. (y/N): ").strip().lower()
+        if choice not in ['y', 'yes']:
+            print()
+            print("Setup cancelled. Existing credentials preserved.")
+            return
+        
+        print()
+        print("Proceeding with reconfiguration...")
+        print()
+    except (FileNotFoundError, ValueError, KeyError):
+        # No existing credentials, continue with setup
+        pass
+    
     print("This setup will store your Google Keep credentials securely.")
     print("Master token will be stored in your OS keyring.")
     print("Non-sensitive config will be saved to ~/.wlater")
@@ -31,7 +55,7 @@ def run_setup():
     if len(sys.argv) > 1 and sys.argv[1] == 'token':
         # Automated mode - try to import selenium
         try:
-            from src.selenium_auth import run_selenium_auth
+            from wlater_mcp.selenium_auth import run_selenium_auth
             
             print("🔄 Starting automated authentication...")
             print("A browser window will open. Please log in to your Google account.")
@@ -132,23 +156,26 @@ def run_setup():
         print(f"✓ Config saved to ~/.wlater")
         print()
         
-        # Get the Python executable path
-        # sys.executable returns the full path to the Python interpreter being used
-        # This automatically handles virtual environments, conda envs, system Python, etc.
-        python_exe = sys.executable
-        
-        # Convert path separators to forward slashes for cross-platform JSON compatibility
-        # Works on Windows (C:\...), macOS/Linux (/usr/...)
-        python_exe_json = python_exe.replace('\\', '/')
-        
         print("Next steps:")
         print("  1. Add wlater-mcp to your mcp.json:")
         print()
+        print("     For VS Code (.vscode/mcp.json):")
+        print('     {')
+        print('       "servers": {')
+        print('         "wlater": {')
+        print('           "command": "python",')
+        print('           "args": ["-m", "wlater_mcp.server"]')
+        print('         }')
+        print('       }')
+        print('     }')
+        print()
+        print("     For Claude Desktop/other MCP clients:")
         print('     {')
         print('       "mcpServers": {')
         print('         "wlater": {')
-        print(f'           "command": "{python_exe_json}",')
-        print('           "args": ["-m", "wlater_mcp.server"]')
+        print('           "command": "python",')
+        print('           "args": ["-m", "wlater_mcp.server"],')
+        print('           "disabled": false')
         print('         }')
         print('       }')
         print('     }')
