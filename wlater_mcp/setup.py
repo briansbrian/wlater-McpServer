@@ -179,6 +179,7 @@ def run_setup():
         print('         }')
         print('       }')
         print('     }')
+        print("OR YOU CAN COPY THIS CONFIG TO YOUR AI AGENT TO SET UP THE MCP SERVER")
         print()
         
         print("  2. Restart your IDE or reconnect MCP servers")

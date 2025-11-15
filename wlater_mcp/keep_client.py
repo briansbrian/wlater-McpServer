@@ -224,13 +224,29 @@ class KeepClient:
         try:
             self.keep.resume(email, master_token, device_id=android_id)
         except Exception as e:
+            error_msg = str(e)
             raise RuntimeError(
-                f"Authentication failed: {str(e)}. Token may be expired. "
-                "Re-run setup.py to refresh credentials."
+                f"AUTHENTICATION FAILED: {error_msg}. "
+                f"Your master token is INVALID or EXPIRED and cannot be used. "
+                f"You MUST re-authenticate by running: wlater-setup token (for automated setup) "
+                f"or wlater-setup (for manual setup). "
+                f"The refresh_notes tool will NOT work until you re-authenticate with valid credentials."
             )
         
-        # Initial sync to load notes
-        self.keep.sync()
+        # Initial sync to load notes (this can also fail with auth errors)
+        try:
+            self.keep.sync()
+        except Exception as e:
+            error_msg = str(e).lower()
+            if 'auth' in error_msg or 'login' in error_msg or 'credential' in error_msg or 'badauthentication' in error_msg:
+                raise RuntimeError(
+                    f"AUTHENTICATION FAILED during initial sync: {str(e)}. "
+                    f"Your credentials are INVALID or EXPIRED. "
+                    f"You MUST re-authenticate by running: wlater-setup token (for automated setup) "
+                    f"or wlater-setup (for manual setup)."
+                )
+            raise RuntimeError(f"Failed to sync with Google Keep: {str(e)}")
+        
         logger.info(f"Authenticated as {email}")
     
     def get_all_notes(self, limit: int = 1000) -> List[Dict[str, Any]]:
@@ -267,6 +283,12 @@ class KeepClient:
             return notes
         except Exception as e:
             logger.exception("Unexpected error in get_all_notes")
+            error_msg = str(e).lower()
+            if 'auth' in error_msg or 'login' in error_msg or 'credential' in error_msg:
+                raise RuntimeError(
+                    f"AUTHENTICATION ERROR: Failed to retrieve notes due to invalid credentials. "
+                    f"Error: {str(e)}. User must run 'wlater-setup token' or 'wlater-setup' to re-authenticate."
+                )
             raise RuntimeError(f"Failed to retrieve notes: {str(e)}")
     
     def get_note(self, note_id: str) -> Dict[str, Any]:
@@ -1245,6 +1267,13 @@ class KeepClient:
             
         except Exception as e:
             logger.exception("Unexpected error in sync_changes")
+            error_msg = str(e).lower()
+            if 'auth' in error_msg or 'login' in error_msg or 'credential' in error_msg or 'badauthentication' in error_msg:
+                return format_error_response(
+                    "AuthenticationError",
+                    f"AUTHENTICATION FAILED - cannot sync with invalid credentials: {str(e)}",
+                    "User must run 'wlater-setup token' (automated) or 'wlater-setup' (manual) to re-authenticate with Google Keep."
+                )
             return format_error_response(
                 type(e).__name__,
                 f"Sync failed: {str(e)}",
@@ -1334,6 +1363,13 @@ class KeepClient:
             
         except Exception as e:
             logger.exception("Unexpected error in refresh_from_server")
+            error_msg = str(e).lower()
+            if 'auth' in error_msg or 'login' in error_msg or 'credential' in error_msg or 'badauthentication' in error_msg:
+                return format_error_response(
+                    "AuthenticationError",
+                    f"AUTHENTICATION FAILED - refresh cannot fix invalid credentials: {str(e)}",
+                    "User must run 'wlater-setup token' (automated) or 'wlater-setup' (manual) to re-authenticate with Google Keep. Refresh only works when credentials are valid."
+                )
             return format_error_response(
                 type(e).__name__,
                 f"Refresh failed: {str(e)}",

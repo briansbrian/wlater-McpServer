@@ -51,8 +51,11 @@ def get_keep_client() -> KeepClient:
         except Exception as e:
             logger.error(f"Failed to initialize Keep Client: {e}")
             raise RuntimeError(
-                f"Authentication failed: {e}. "
-                "Run check_credentials tool for details or re-run setup.py"
+                f"CRITICAL: Google Keep authentication FAILED. Your stored credentials are INVALID or EXPIRED. "
+                f"Error details: {e}. "
+                f"REQUIRED ACTION: User must run 'wlater-setup token' (automated) or 'wlater-setup' (manual) "
+                f"to re-authenticate with Google Keep. The check_credentials tool only checks if credentials "
+                f"exist in storage, not if they are valid. refresh_notes will NOT fix this - new credentials are required."
             )
     
     return _keep_client
@@ -60,27 +63,49 @@ def get_keep_client() -> KeepClient:
 
 @mcp.tool
 def check_credentials() -> Dict[str, Any]:
-    """Check if credentials are configured and valid (read-only).
+    """Check if credentials are configured and actually valid by testing authentication.
+    
+    This tool now performs a LIVE authentication test, not just checking if credentials exist.
     
     Returns:
-        Dictionary with configuration status and email if configured
+        Dictionary with configuration status, email, and actual authentication test result
     """
     try:
         email, token, android_id = load_credentials()
-        return {
-            "configured": True,
-            "email": email,
-            "message": "Credentials found and valid"
-        }
+        
+        # Test if credentials actually work by attempting to initialize Keep Client
+        try:
+            test_client = KeepClient(email, token, android_id)
+            return {
+                "configured": True,
+                "valid": True,
+                "email": email,
+                "message": "✅ Credentials found and VERIFIED - authentication successful"
+            }
+        except Exception as auth_error:
+            # Credentials exist but are invalid/expired
+            error_msg = str(auth_error)
+            return {
+                "configured": True,
+                "valid": False,
+                "email": email,
+                "message": f"❌ Credentials exist but AUTHENTICATION FAILED: {error_msg}",
+                "error": error_msg,
+                "action_required": "Run 'wlater-setup token' (automated) or 'wlater-setup' (manual) to re-authenticate"
+            }
     except FileNotFoundError as e:
         return {
             "configured": False,
-            "message": f"Config file not found: {e}. Run setup.py first."
+            "valid": False,
+            "message": f"❌ Config file not found: {e}. No credentials stored.",
+            "action_required": "Run 'wlater-setup token' or 'wlater-setup' to configure credentials"
         }
     except Exception as e:
         return {
             "configured": False,
-            "message": f"Error loading credentials: {e}"
+            "valid": False,
+            "message": f"❌ Error loading credentials: {e}",
+            "action_required": "Run 'wlater-setup token' or 'wlater-setup' to fix credentials"
         }
 
 
