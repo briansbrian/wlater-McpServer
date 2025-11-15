@@ -26,41 +26,69 @@ def run_setup():
     print("Non-sensitive config will be saved to ~/.wlater")
     print()
     
-    # Offer selenium or manual entry
-    print("Choose credential method:")
-    print("  (s) Automated selenium authentication")
-    print("  (m) Manual credential entry")
-    print()
-    
-    choice = input("Enter choice [s/m]: ").strip().lower()
-    
-    # Initialize variables to avoid unbound errors
-    email = None
-    token = None
-    android_id = None
-    
-    if choice == 's':
+    # Check if 'token' argument was passed for automated mode
+    if len(sys.argv) > 1 and sys.argv[1] == 'token':
+        # Automated mode - try to import selenium
+        try:
+            from src.selenium_auth import run_selenium_auth
+            
+            print("🔄 Starting automated authentication...")
+            print("A browser window will open. Please log in to your Google account.")
+            print()
+            
+            result = run_selenium_auth()
+            
+            if result is None:
+                print()
+                print("❌ Automated authentication failed")
+                print("Please try manual mode: wlater-setup")
+                return
+            
+            email, token, android_id = result
+            print()
+            print("✓ Authentication successful!")
+            
+        except ImportError as e:
+            print()
+            print("❌ Selenium is not installed.")
+            print()
+            print("To use automated authentication, install selenium:")
+            print("  pip install selenium")
+            print()
+            print("Or use manual mode instead:")
+            print("  wlater-setup")
+            return
+        except Exception as e:
+            print()
+            print(f"❌ Error during automated authentication: {e}")
+            print("Try manual mode: wlater-setup")
+            return
+    else:
+        # Manual mode
+        print("📖 Manual Setup Mode")
         print()
-        print("❌ Automated selenium authentication is not available in pip-installed version.")
+        print("To get your master token, you can:")
+        print("  1. Use automated mode: wlater-setup token")
+        print("  2. Follow this guide: https://github.com/rukins/gpsoauth-java/blob/b74ebca999d0f5bd38a2eafe3c0d50be552f6385/README.md#receiving-an-authentication-token")
+        print("  3. Or see: https://gkeepapi.readthedocs.io/en/latest/#authenticating")
         print()
-        print("For automated authentication, please:")
-        print("  1. Clone the repository: git clone https://github.com/briansbrian/wlater-McpServer")
-        print("  2. Run: python Scripts/selenium_get_oauth.py")
-        print("  3. Use manual mode (m) below with the credentials obtained")
-        print()
-        print("Or use manual mode now:")
-        print()
-        choice = 'm'  # Fall through to manual mode
+        
+        choice = 'm'
     
-    if choice == 'm':
         # Manual entry
-        print()
         email = input("Enter your Google email: ").strip()
+        
+        if not email:
+            print("❌ Error: Email is required.")
+            return
         
         print()
         print("Enter your master token (starts with 'aas_et/'):")
-        print("(You can obtain this using Scripts/selenium_get_oauth.py)")
         token = input("Master token: ").strip()
+        
+        if not token:
+            print("❌ Error: Master token is required. Please paste your token.")
+            return
         
         print()
         print("Enter your android_id (16 hexadecimal characters):")
@@ -70,15 +98,6 @@ def run_setup():
         if not android_id:
             android_id = generate_android_id()
             print(f"Generated android_id: {android_id}")
-    
-    else:
-        print("Invalid choice. Please run setup again.")
-        return
-    
-    # Validate all credentials are set
-    if not email or not token or not android_id:
-        print("❌ Error: Missing credentials. Please try again.")
-        return
     
     # Validate credentials
     print()

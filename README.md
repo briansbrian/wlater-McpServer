@@ -10,15 +10,28 @@ pip install wlater-mcp
 
 ## Setup
 
-Run the setup wizard to configure your credentials:
+### Quick Setup (Automated)
+
+For automated authentication with Selenium:
+
+```bash
+pip install selenium
+wlater-setup token
+```
+
+A browser window will open—just log in to your Google account and the token will be extracted automatically.
+
+### Manual Setup
+
+If you prefer manual setup or automated doesn't work:
 
 ```bash
 wlater-setup
 ```
 
-Choose your authentication method:
-- **Automated**: Opens Chrome and logs you in automatically
-- **Manual**: Enter your credentials directly
+You'll need your master token. Get it from:
+- [gpsoauth Guide](https://github.com/rukins/gpsoauth-java/blob/b74ebca999d0f5bd38a2eafe3c0d50be552f6385/README.md#receiving-an-authentication-token)
+- [gkeepapi Documentation](https://gkeepapi.readthedocs.io/en/latest/#authenticating)
 
 ## Configuration
 
