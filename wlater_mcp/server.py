@@ -89,8 +89,7 @@ def check_credentials() -> Dict[str, Any]:
                 "configured": True,
                 "valid": False,
                 "email": email,
-                "message": f"❌ Credentials exist but AUTHENTICATION FAILED: {error_msg}",
-                "error": error_msg,
+                "message": f"❌ {error_msg}",
                 "action_required": "Run 'wlater-setup token' (automated) or 'wlater-setup' (manual) to re-authenticate"
             }
     except FileNotFoundError as e:
