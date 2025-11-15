@@ -24,7 +24,7 @@ The wlater MCP server implements a **Tier 2** security model, providing both rea
 - **Note Updates**: Modify titles, text content, colors, pin/archive status
 - **Label Management**: Create labels, add/remove labels from notes
 - **Preview-Before-Sync**: Review all changes before saving to Google Keep
-- - **Trash/Untrash**: Temporary discard notes
+- **Trash/Untrash**: Temporary discard notes
 - **Explicit Sync Control**: Manual sync ensures no accidental modifications
 
 ### Security
@@ -1166,6 +1166,7 @@ Contributions are welcome! Please:
 ## Support
 
 For issues, questions, or feature requests, please open an issue on GitHub.
+
 
 
 
