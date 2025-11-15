@@ -2,6 +2,9 @@
 
 Connect your AI assistant to Google Keep. Search, read, and manage your notes and lists through natural conversation.
 
+![Image_fx(19)](https://github.com/user-attachments/assets/7f58034c-c3df-48ac-ac16-55d1adf032bc)
+
+
 ## Installation
 
 ```bash
@@ -129,3 +132,4 @@ Check your config file paths and restart your MCP client.
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
