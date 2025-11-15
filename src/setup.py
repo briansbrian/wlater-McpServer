@@ -5,6 +5,7 @@ authentication or manual credential entry.
 """
 
 import sys
+import os
 from pathlib import Path
 
 from src.credentials import (
@@ -130,19 +131,30 @@ def run_setup():
         print(f"✓ Master token stored in OS keyring")
         print(f"✓ Config saved to ~/.wlater")
         print()
+        
+        # Get the Python executable path
+        # sys.executable returns the full path to the Python interpreter being used
+        # This automatically handles virtual environments, conda envs, system Python, etc.
+        python_exe = sys.executable
+        
+        # Convert path separators to forward slashes for cross-platform JSON compatibility
+        # Works on Windows (C:\...), macOS/Linux (/usr/...)
+        python_exe_json = python_exe.replace('\\', '/')
+        
         print("Next steps:")
-        print("  1. Add wlater MCP server to your MCP client config:")
+        print("  1. Add wlater-mcp to your mcp.json:")
         print()
         print('     {')
         print('       "mcpServers": {')
         print('         "wlater": {')
-        print('           "command": "python",')
+        print(f'           "command": "{python_exe_json}",')
         print('           "args": ["-m", "wlater_mcp.server"]')
         print('         }')
         print('       }')
         print('     }')
         print()
-        print("  2. Restart your MCP client")
+        
+        print("  2. Restart your IDE or reconnect MCP servers")
         print("  3. The server will authenticate automatically using stored credentials")
         print()
         

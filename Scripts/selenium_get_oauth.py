@@ -143,7 +143,6 @@ def get_oauth_token_selenium(email, password):
             else:
                 print("⚠️  Warning: Token doesn't start with 'oauth2_4/' - this might be incorrect")
             
-            print("\n💾 You can now use this token with get_master_token.py")
             return oauth_token
         else:
             print("\n❌ ERROR: Could not find oauth_token in cookies!")
