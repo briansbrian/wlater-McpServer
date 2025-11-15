@@ -52,7 +52,7 @@ Add to your MCP client's config file:
 }
 ```
 
-**For Claude Desktop** or other MCP clients:
+**For Claude Desktop**,**KIRO** or other MCP clients:
 ```json
 {
   "mcpServers": {
@@ -123,13 +123,21 @@ Check your config file paths and restart your MCP client.
 - No automatic modifications
 - Delete operations not exposed
 
+## Credits
+ -This Mcp utilizes the gkeepapi by kiwiz
+ - https://github.com/kiwiz/gkeepapi
+
 ## Links
 
-- [GitHub Repository](https://github.com/briansbrian/wlater-McpServer)
+- [Python Package](https://pypi.org/project/wlater-mcp)
 - [Report Issues](https://github.com/briansbrian/wlater-McpServer/issues)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
+
+
+
 
