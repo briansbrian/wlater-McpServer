@@ -1,6 +1,6 @@
 ﻿# wlater MCP Server
 
-A Model Context Protocol (MCP) server that provides AI assistants with secure, access to Google Keep notes and lists.
+A Model Context Protocol (MCP) server that provides AI assistants with secure access to Google Keep notes and lists.
 
 FOR INSTALLATION PLEASE VISIT build branch
 https://github.com/briansbrian/wlater-McpServer/tree/build
@@ -10,7 +10,7 @@ https://github.com/briansbrian/wlater-McpServer/tree/build
 
 ## Features
 
-The wlater MCP server implements a **Tier 2** security model, providing both read-only access and safe modification capabilities with explicit sync control.
+The wlater MCP server implements a **Tier 2** security model, providing both read/Write access and safe modification capabilities with explicit sync control.
 
 ### Tier 1: Read-Only Access
 - **Query & Search**: List, search, and retrieve Keep data
@@ -1166,6 +1166,7 @@ Contributions are welcome! Please:
 ## Support
 
 For issues, questions, or feature requests, please open an issue on GitHub.
+
 
 
 
