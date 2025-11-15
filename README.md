@@ -5,6 +5,9 @@ A Model Context Protocol (MCP) server that provides AI assistants with secure, r
 FOR INSTALLATION PLEASE VISIT build branch
 https://github.com/briansbrian/wlater-McpServer/tree/build
 
+![Image_fx(19)](https://github.com/user-attachments/assets/eb5d595d-8433-470c-8565-1fad6a3a232e)
+
+
 ## Features
 
 ### Tier 1: Read-Only Access
@@ -1157,4 +1160,5 @@ Contributions are welcome! Please:
 ## Support
 
 For issues, questions, or feature requests, please open an issue on GitHub.
+
 
