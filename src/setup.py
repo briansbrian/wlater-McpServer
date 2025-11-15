@@ -7,7 +7,7 @@ authentication or manual credential entry.
 import sys
 from pathlib import Path
 
-from credentials import (
+from src.credentials import (
     store_credentials,
     validate_master_token,
     validate_android_id,
@@ -34,43 +34,25 @@ def run_setup():
     
     choice = input("Enter choice [s/m]: ").strip().lower()
     
-    if choice == 's':
-        # Import and run selenium script
-        try:
-            # Add Scripts directory to path
-            scripts_dir = Path(__file__).parent.parent / "Scripts"
-            sys.path.insert(0, str(scripts_dir))
-            
-            from selenium_get_oauth import run_selenium_auth
-            
-            print()
-            print("Starting automated authentication...")
-            print("A browser window will open. Please log in to your Google account.")
-            print()
-            
-            result = run_selenium_auth()
-            
-            if result is None:
-                print()
-                print("❌ Selenium authentication failed")
-                print("Please try manual entry or check your credentials.")
-                return
-            
-            email, token, android_id = result
-            print()
-            print("✓ Authentication successful!")
-            
-        except ImportError as e:
-            print()
-            print(f"❌ Error: Could not import selenium script: {e}")
-            print("Please ensure selenium_get_oauth.py is in the Scripts/ directory.")
-            return
-        except Exception as e:
-            print()
-            print(f"❌ Error during selenium authentication: {e}")
-            return
+    # Initialize variables to avoid unbound errors
+    email = None
+    token = None
+    android_id = None
     
-    elif choice == 'm':
+    if choice == 's':
+        print()
+        print("❌ Automated selenium authentication is not available in pip-installed version.")
+        print()
+        print("For automated authentication, please:")
+        print("  1. Clone the repository: git clone https://github.com/briansbrian/wlater-McpServer")
+        print("  2. Run: python Scripts/selenium_get_oauth.py")
+        print("  3. Use manual mode (m) below with the credentials obtained")
+        print()
+        print("Or use manual mode now:")
+        print()
+        choice = 'm'  # Fall through to manual mode
+    
+    if choice == 'm':
         # Manual entry
         print()
         email = input("Enter your Google email: ").strip()
@@ -91,6 +73,11 @@ def run_setup():
     
     else:
         print("Invalid choice. Please run setup again.")
+        return
+    
+    # Validate all credentials are set
+    if not email or not token or not android_id:
+        print("❌ Error: Missing credentials. Please try again.")
         return
     
     # Validate credentials

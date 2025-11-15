@@ -10,7 +10,12 @@ import getpass
 from pathlib import Path
 from typing import Tuple, Optional
 
-import keyring
+try:
+    import keyring
+except ImportError:
+    raise ImportError(
+        "keyring is required. Install it with: pip install keyring"
+    )
 
 
 SERVICE_NAME = "google-keep-token"

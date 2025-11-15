@@ -22,7 +22,7 @@ Choose your authentication method:
 
 ## Configuration
 
-Add to your MCP client's config file (e.g., `claude_desktop_config.json`):
+Add to your MCP client's config file (e.g., `mcp.json`):
 
 ```json
 {

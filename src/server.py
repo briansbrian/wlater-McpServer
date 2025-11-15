@@ -7,10 +7,15 @@ Google Keep notes and lists without any modification capabilities.
 import logging
 from typing import List, Optional, Dict, Any
 
-from fastmcp import FastMCP
+try:
+    from fastmcp import FastMCP
+except ImportError:
+    raise ImportError(
+        "fastmcp is required. Install it with: pip install fastmcp"
+    )
 
-from credentials import load_credentials
-from keep_client import KeepClient
+from src.credentials import load_credentials
+from src.keep_client import KeepClient
 
 
 # Configure logging

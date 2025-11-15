@@ -5,7 +5,12 @@ import re
 from datetime import datetime
 from typing import List, Dict, Optional, Any
 
-import gkeepapi
+try:
+    import gkeepapi
+except ImportError:
+    raise ImportError(
+        "gkeepapi is required. Install it with: pip install gkeepapi"
+    )
 
 
 logger = logging.getLogger("wlater")
