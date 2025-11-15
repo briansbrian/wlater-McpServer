@@ -38,13 +38,21 @@ def run_setup():
             
             result = run_selenium_auth()
             
-            if result is None:
+            if result is None or not isinstance(result, tuple) or len(result) != 3:
                 print()
                 print("❌ Automated authentication failed")
                 print("Please try manual mode: wlater-setup")
                 return
             
             email, token, android_id = result
+            
+            # Ensure all values are strings
+            if not isinstance(email, str) or not isinstance(token, str) or not isinstance(android_id, str):
+                print()
+                print("❌ Invalid credentials format returned")
+                print("Please try manual mode: wlater-setup")
+                return
+            
             print()
             print("✓ Authentication successful!")
             
