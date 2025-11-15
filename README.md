@@ -123,6 +123,10 @@ Check your config file paths and restart your MCP client.
 - No automatic modifications
 - Delete operations not exposed
 
+## Credits
+ -This Mcp utilizes the gkeepapi by kiwiz
+ - https://github.com/kiwiz/gkeepapi
+
 ## Links
 
 - [GitHub Repository](https://github.com/briansbrian/wlater-McpServer)
@@ -132,6 +136,7 @@ Check your config file paths and restart your MCP client.
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
 
 
 
