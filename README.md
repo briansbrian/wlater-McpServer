@@ -52,7 +52,7 @@ Add to your MCP client's config file:
 }
 ```
 
-**For Claude Desktop** or other MCP clients:
+**For Claude Desktop,Kiro ** or other MCP clients:
 ```json
 {
   "mcpServers": {
@@ -132,4 +132,5 @@ Check your config file paths and restart your MCP client.
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
 
