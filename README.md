@@ -10,13 +10,15 @@ https://github.com/briansbrian/wlater-McpServer/tree/build
 
 ## Features
 
+The wlater MCP server implements a **Tier 2** security model, providing both read-only access and safe modification capabilities with explicit sync control.
+
 ### Tier 1: Read-Only Access
 - **Query & Search**: List, search, and retrieve Keep data
 - **List Management**: View todo items with checked/unchecked status
 - **Label Support**: Filter and organize notes by labels
 - **Media Access**: Retrieve metadata and download links for images, drawings, and audio
 
-### Tier 2: Safe Modifications
+### Tier 2: Safe Modifications (✅ Implemented)
 - **Note Creation**: Create text notes and todo lists
 - **List Operations**: Check/uncheck items, add new items to lists
 - **Note Updates**: Modify titles, text content, colors, pin/archive status
@@ -31,10 +33,10 @@ https://github.com/briansbrian/wlater-McpServer/tree/build
 
 ## Security Model
 
-The server implements a tiered exposure model:
-- **Tier 1 (Implemented)**: Read-only operations - list, search, get note details
-- **Tier 2 (Implemented)**: Modifications with explicit sync - create, update, archive notes and lists
-- **Tier 3 (Not Exposed)**: Destructive operations - delete, trash
+The server implements a **Tier 2** tiered exposure model for maximum safety:
+- **Tier 1**: Read-only operations - list, search, get note details ✅ Fully Implemented
+- **Tier 2**: Modifications with explicit sync - create, update, archive notes and lists ✅ Fully Implemented
+- **Tier 3**: Destructive operations - delete, trash ❌ Never Exposed
 
 ### Tier 2 Safety Features
 
