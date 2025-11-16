@@ -116,6 +116,11 @@ Your token may have expired. Re-run setup.
 **Server not appearing**  
 Check your config file paths and restart your MCP client.
 
+**Automated method doesnt work**
+Make sure you have installed:
+    Selenium
+    Webdriver (important)
+
 ## Security
 
 - Credentials stored in your system keyring (Windows Credential Locker, macOS Keychain, Linux Secret Service)
@@ -136,6 +141,7 @@ Check your config file paths and restart your MCP client.
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
 
 
 
