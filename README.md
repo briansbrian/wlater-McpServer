@@ -118,8 +118,8 @@ Check your config file paths and restart your MCP client.
 
 **Automated method doesnt work**
 Make sure you have installed:
-    Selenium
-    Webdriver (important)
+    -Selenium
+    -Webdriver (important)
 
 ## Security
 
@@ -141,6 +141,7 @@ Make sure you have installed:
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details
+
 
 
 
