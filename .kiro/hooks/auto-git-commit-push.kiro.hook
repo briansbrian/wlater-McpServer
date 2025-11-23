@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Auto Git Commit & Push",
+  "description": "Automatically commits and pushes changes to git repository after a task is completed successfully",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".kiro/tasks/**/*.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A task has been completed. Review all changes in the git working directory. If there are uncommitted changes, create a meaningful commit message based on the completed task and the files that were modified, then commit and push the changes to the remote repository. Use git commands to: 1) Check git status, 2) Stage all changes (git add .), 3) Commit with a descriptive message, 4) Push to remote (git push)."
+  }
+}

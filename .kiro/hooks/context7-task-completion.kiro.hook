@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Context7 API Verification",
+  "description": "Automatically triggers context7 verification after any task is completed to check for the latest and correct API usage patterns",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.py",
+      "Scripts/**/*.py",
+      "requirements.txt",
+      "README.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A task has been completed with changes to the codebase. Use context7 to verify that all API usage is current and correct. Check for:\n1. Correct FastMCP decorator syntax (@mcp.tool without parentheses)\n2. Proper gkeepapi method usage\n3. Correct credential management patterns\n4. Up-to-date dependency versions\n5. Any deprecated patterns that need updating\n\nReview the changed files and cross-reference with the latest API documentation to ensure best practices are followed."
+  }
+}
